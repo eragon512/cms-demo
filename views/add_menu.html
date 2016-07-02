@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		New Menu:
+		
+		<form name="menu_entries" action="../model/create_menu.php" method="POST">
+			<button type="button" onclick="javascript: add_menu_entry();">Add new menu entry</button>
+			<button type="submit" value="Submit">Create Menu</button>
+		</form>
+		<script>
+			var counter = 1;
+			
+			var add_menu_entry = function() {
+				console.log("Hello");
+				var menu_entry_title = document.createElement('input');
+				menu_entry_title.type = "text";
+				menu_entry_title.name = "menu_entry_title_"+counter;
+				menu_entry_title.placeholder = "Menu Title";
+				
+				var menu_entry_link = document.createElement('input');
+				menu_entry_link.type = "text";
+				menu_entry_link.name = "menu_entry_link_"+counter;
+				menu_entry_link.placeholder = "Menu Link";
+				
+				var menu_entry = document.createElement('div');
+				menu_entry.appendChild(menu_entry_title);
+				menu_entry.appendChild(menu_entry_link);
+				
+				document.getElementsByName("menu_entries")[0].appendChild(menu_entry);
+				counter += 1;
+			}
+		</script>
+	</body>
+</html>
