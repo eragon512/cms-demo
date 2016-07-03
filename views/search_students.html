@@ -7,13 +7,8 @@
 			Filter by branch: 
 			<select name="dropdown">
 				<option value="">Select branch</option>
-				<?php
-					require("load_student_branch_list.php");
-					$branch_list = load_student_branch_list();
-					foreach($branch_list as $branch) {
-						echo "<option value='".$branch."'>".$branch."</option>";
-					}
-				?>
+				<option value="CS">CS</option>
+				<option value="Bio">Bio</option>
 			</select>
 			Search by name: <input type="text" name="search" />
 			<button type="submit">Search for Students</button>
