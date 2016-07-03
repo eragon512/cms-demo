@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		New Pages:
+		
+		<form name="pages" action="../model/create_page.php" method="POST">
+			<button type="button" onclick="javascript: add_page();">Add new page</button>
+			<button type="submit">Create Pages</button>
+			<br>
+		</form>
+		<script>
+			var counter = 1;
+			
+			var add_page = function() {
+				console.log("Hello");
+				var page = document.createElement('input');
+				page.type = "text";
+				page.name = "page_"+counter;
+				page.placeholder = "Page "+ counter +" Title";
+				
+				document.getElementsByName("pages")[0].appendChild(page);
+				counter += 1;
+			}
+		</script>
+	</body>
+</html>
