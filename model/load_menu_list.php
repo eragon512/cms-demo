@@ -1,7 +1,7 @@
 <?php
-	
 	function load_menu_list() {
-		$connect = mysqli_connect("localhost","root","","cms-demo");
+		require("load_database.php");
+		$connect = load_database();
 
 		$num_menu = (int)(mysqli_fetch_array(mysqli_query($connect,"SELECT MAX(menu_id) AS last_id FROM menu_list;"))["last_id"]);
 		$menu_list = array();
@@ -19,5 +19,3 @@
 		mysqli_close($connect);
 		return $menu_list;
 	}
-
-	load_menu_list();

@@ -3,7 +3,8 @@
 		$num_fields = 2;
 		$num_entries = count($_POST)/$num_fields;
 
-		$connect = mysqli_connect("localhost","root","","cms-demo");
+		require("load_database.php");
+		$connect = load_database();
 		$menu_id = (int)(mysqli_fetch_array(mysqli_query($connect,"SELECT MAX(menu_id) AS last_id FROM menu_list;"),MYSQLI_ASSOC)["last_id"])+1;
 
 		print_r($_POST);
