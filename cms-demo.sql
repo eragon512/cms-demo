@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 02, 2016 at 06:50 PM
+-- Generation Time: Jul 03, 2016 at 07:50 PM
 -- Server version: 5.7.9
 -- PHP Version: 5.6.15
 
@@ -41,12 +41,13 @@ CREATE TABLE IF NOT EXISTS `menu_list` (
 INSERT INTO `menu_list` (`menu_id`, `menu_title`, `menu_link`) VALUES
 (1, 'show_hello_world', 'hello_world.html'),
 (1, 'show_youtube_video/show_html', 'show_html.html'),
-(2, 'cei', 'cwhebj'),
-(3, 'bwhei', 'ncjewk'),
-(3, 'cnwek', 'ncjkew'),
 (3, 'show_hello_world', 'hello_world.html'),
 (4, 'about us', 'hello_world.html'),
-(5, '', '');
+(6, 'shakalaka', 'boomboom'),
+(6, 'show_hello_world', 'hello_world.html'),
+(7, 'search_students', 'search_students.html'),
+(7, 'show_hello_world', 'hello_world.html'),
+(7, 'show_youtube_video/show_html', 'show_html.html');
 
 -- --------------------------------------------------------
 
