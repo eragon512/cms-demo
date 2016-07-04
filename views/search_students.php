@@ -8,7 +8,7 @@
 			<select name="dropdown">
 				<option value="">Select branch</option>
 				<?php
-					require("load_student_branch_list.php");
+					require("../model/load_student_branch_list.php");
 					$branch_list = load_student_branch_list();
 					foreach($branch_list as $branch) {
 						echo "<option value='".$branch."'>".$branch."</option>";
