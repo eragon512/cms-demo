@@ -12,7 +12,7 @@
 		<ul>
 			<?php
 				foreach($client_database_list as $client_database) {
-					echo "<li><a href='view_client_database.php?db_server={$client_database["client_db_server"]}&db_user={$client_database["client_db_username"]}&db_pass={$client_database["client_db_password"]}&db_name={$client_database["client_db_name"]}'>{$client_database["client_db_name"]}</a></li>\n";
+					echo "<li><a href='view_client_database.php?db_server={$client_database["client_db_server"]}&db_user={$client_database["client_db_username"]}&db_pass={$client_database["client_db_password"]}&db_name={$client_database["client_db_name"]}'>{$client_database["client_db_name"]}</a> - server: {$client_database["client_db_server"]}, username: {$client_database["client_db_username"]} </li>\n";
 				}
 			?>
 		</ul>
