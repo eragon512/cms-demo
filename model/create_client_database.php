@@ -6,7 +6,7 @@
 		
 		//print_r($_POST);
 
-		require("load_database.php");
+		require_once("load_database.php");
 		$connect = load_database();
 
 		for($i=1;$i<=$num_entries;++$i) {

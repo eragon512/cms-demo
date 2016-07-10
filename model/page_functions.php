@@ -4,17 +4,19 @@
 		$connect = load_database();
 		$find_page_result = mysqli_query($connect,"SELECT page_id FROM page_list WHERE page_name={$page_name}");
 		if(!$find_page_result) {
+			echo mysqli_error($connect);
+			mysqli_close($connect);
 			die("Invalid Page Name");
 		}
 		mysqli_close($connect);
 		return $find_page_result["page_id"];
 	}
 	
-	function create_page($page_name) {
+	function create_page($page) {
 		require_once("load_database.php");
 		$connect = load_database();
-		$stmt = $connect->prepare("INSERT INTO page_list(page_name) VALUES (?) ;");
-		$stmt->bind_param("s",$page_name);
+		$stmt = $connect->prepare("INSERT INTO page_list(page_name,layout_id) VALUES (?,?) ;");
+		$stmt->bind_param("si",$page["page_name"],$page["layout_id"]);
 		if(!$stmt->execute()) {
 			echo mysqli_error($connect);
 			mysqli_close($connect);
@@ -22,23 +24,18 @@
 		}
 		$stmt->close();
 		mysqli_close($connect);
-		
-		$page_id = find_page_id($page_name);
-		require_once("panel_functions.php");
-		create_panel($page_id,array(
-			"panel_id" => 0,
-			"panel_parent_id" => 1,
-			"panel_height" => 100,
-			"panel_width" => 100,
-			"panel_class" => "top"
-		));
 	}
 
 	function load_page_list() {
 		require_once("load_database.php");
 		$connect = load_database();
 		$page_list = [];
-		$load_page_list_result = mysqli_query($connect,"SELECT * FROM page_list");
+		$load_page_list_result = mysqli_query($connect,"SELECT * FROM page_list ;");
+		if(!$load_page_list_result) {
+			echo mysqli_error($connect);
+			mysqli_close($connect);
+			die();
+		}
 		while($page = mysqli_fetch_array($load_page_list_result,MYSQLI_ASSOC)) {
 			array_push($page_list,$page);
 		}
@@ -50,20 +47,42 @@
 		require_once("load_database.php");
 		$connect = load_database();
 		$page_result = mysqli_query($connect,"SELECT * FROM page_list WHERE page_id={$page_id};");
-		$page = mysqli_fetch_array($page_result,MYSQLI_ASSOC);
-		
-		$page["panel"] = [];
-		$page_panel_list_result = mysqli_query($connect,"SELECT * FROM panel_list WHERE page_id={$page_id} ;");
-		if(!$page_panel_list_result) {
-			echo mysqli_error($connect);
-			//die();
-		} else {
-			while($panel = mysqli_fetch_array($page_panel_list_result,MYSQLI_ASSOC)) {
-				array_push($page["panel"],$panel);
-			}
+		if(!$page_result || mysqli_num_rows($page_result) === 0) {
+			return false;
 		}
+		$page = mysqli_fetch_array($page_result,MYSQLI_ASSOC);
 		mysqli_close($connect);
-		
-		//var_dump($page);
 		return $page;
+	}
+
+	function store_page_data($page_id,$layout_id,$page_data) {
+		if(isset($page_id) && isset($layout_id)) {
+			require_once("load_database.php");
+			$connect = load_database();
+
+			foreach($page_data as $id => $data) {
+				$panel_id = $id;
+				$panel_data = $data;
+				$page_panel_result = mysqli_query($connect,"SELECT * FROM page_panel_list WHERE page_id={$page_id} AND layout_id={$layout_id} AND panel_child_id={$panel_id} ;");
+				if($page_panel_result) {
+					if(mysqli_num_rows($page_panel_result) === 0) {
+						$stmt = $connect->prepare("INSERT INTO page_panel_list(page_id,layout_id,panel_child_id,panel_data) VALUES(?,?,?,?) ;");
+						$stmt->bind_param("iiis",$page_id,$layout_id,$panel_id,$panel_data);
+						$stmt->execute();
+						echo $stmt->error;
+						$stmt->close();
+					}
+					else {
+						$stmt = $connect->prepare("UPDATE page_panel_list SET panel_data=? WHERE page_id=? AND layout_id=? AND panel_child_id=? ;");
+						$stmt->bind_param("siii",$panel_data,$page_id,$layout_id,$panel_id);
+						$stmt->execute();
+						echo $stmt->error;
+						$stmt->close();
+					}
+				} else {
+					echo mysqli_error($connect);
+				}
+			}
+			mysqli_close($connect);
+		}
 	}

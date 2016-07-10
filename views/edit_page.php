@@ -1,5 +1,7 @@
 <?php
-	require("../model/page_functions.php");
+	require_once("../model/page_functions.php");
+	require_once("../model/layout_functions.php");
+	require_once("../model/panel_functions.php");
 	if(!isset($_GET["page_id"])) {
 		die("No page id found");
 	}
@@ -7,7 +9,9 @@
 	if(!($page = load_page($page_id))) {
 		die("Invalid Page Id");
 	}
-	require("../model/panel_functions.php");
+	if($_SERVER["REQUEST_METHOD"] === "POST") {
+		store_page_data($page["page_id"],$page["layout_id"],$_POST);
+	}
 ?>
 
 <!DOCTYPE html>
@@ -15,71 +19,45 @@
 	<head>
 		<style>
 			html,body {
-				height: 95%;
-				width: 95%;
-				display: table;
-				position: relative;
+				height: 100%;
+				width : 100%;
+				max-height: 100%;
+				max-width: 100%;
+			}
+			body {
+				display: flex;
+			}
+			.wrapper {
+				height: 100%;
+				width: 100%;
+				display: flex;
+			}
+			.horizontal-wrapper {
+				flex-direction: row;
+			}
+			.vertical-wrapper {
+				flex-direction: column;
 			}
 			.panel {
+				box-sizing: border-box;
 				border: 1px solid red;
-				overflow: hidden;
 			}
-			.left, .right {
-				display: table-column;
+			.panel-content {
+				max-height: 100%;
+				max-width: 100%;
+				height: 100%;
+				width: 100%;
+				overflow: auto;
 			}
-			.top, .bottom {
-				display: flex;
+			textarea {
+				max-width: 100%;
+				max-height: 100%;
+				min-width: 80%;
+				min-height: 80%;
 			}
 		</style>
 	</head>
 	<body>
-		<?php load_panel($page_id,0,"edit"); var_dump($panel_tracker);?>
+		<?php load_panel($page["layout_id"],"page-edit",$page["page_id"]);?>
 	</body>
-	<script>
-
-		function setAttributes(el, options) {
-			Object.keys(options).forEach(function(attr) {
-				el.setAttribute(attr, options[attr]);
-			});
-		};
-
-		function newElement(element,options) {
-			var newElement = document.createElement(element);
-			setAttributes(newElement,options);
-			return newElement;
-		};
-
-		var split_panel_called = [];
-		var split_panel = function(panel_id) {
-			if(split_panel_called.indexOf(panel_id) != -1) {
-				return;
-			} else {
-				split_panel_called.push(panel_id);
-			}
-			console.log(panel_id);
-			var panel = document.getElementById(panel_id);
-			
-			var sub_panels_form = newElement('form',{"action": "process_input.php", "method": "POST"});
-
-			var page_id = newElement('input',{"type": "hidden","name": "page_id", "value": <?php echo $page_id; ?> });
-			var panel_id = newElement('input',{"type": "hidden","name": "panel_id", "value": panel_id});
-
-			var horizontal_split = newElement('input',{"type": "radio", "name": "cut_direction", "value": "horizontal"});
-			var vertical_split = newElement('input',{"type": "radio", "name": "cut_direction", "value": "vertical"});
-			var specify = newElement('input',{"type": "number", "name": "height_width", "min": 0, "max": 100});
-			var submitButton = newElement('button',{"type": "submit"});
-			submitButton.innerHTML = "Split Panel";
-
-			sub_panels_form.appendChild(page_id);
-			sub_panels_form.appendChild(panel_id);
-			sub_panels_form.appendChild(horizontal_split);
-			sub_panels_form.innerHTML += "horizontal";
-			sub_panels_form.appendChild(vertical_split);
-			sub_panels_form.innerHTML += "vertical";
-			sub_panels_form.innerHTML += "\n<br>specify height/width: ";
-			sub_panels_form.appendChild(specify);
-			sub_panels_form.appendChild(submitButton);
-			panel.appendChild(sub_panels_form);
-		};
-	</script>
 </html>

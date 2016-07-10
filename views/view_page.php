@@ -1,5 +1,6 @@
 <?php
-	require("../model/page_functions.php");
+	require_once("../model/panel_functions.php");
+	require_once("../model/page_functions.php");
 	if(!isset($_GET["page_id"])) {
 		die("No page id found");
 	}
@@ -7,7 +8,6 @@
 	if(!($page = load_page($page_id))) {
 		die("Invalid Page Id");
 	}
-	require("../model/panel_functions.php");
 ?>
 
 <!DOCTYPE html>
@@ -15,17 +15,34 @@
 	<head>
 		<style>
 			html,body {
-				height: 95%;
-				width: 95%;
-
+				height: 100%;
+				width : 100%;
+				position: absolute;
+				display: table;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				display: flex;
 			}
 			.panel {
 				border: 1px solid red;
-				display: inline-flex;
+			}
+			.wrapper {
+				height: 100%;
+				width: 100%;
+				display: flex;
+			}
+			.horizontal-wrapper {
+				flex-direction: row;
+			}
+			.vertical-wrapper {
+				flex-direction: column;
 			}
 		</style>
 	</head>
 	<body>
-		<?php load_panel($page_id,0,"view"); ?>
+		<?php load_panel($page["layout_id"],"page-view",$page["page_id"]);?>
+
 	</body>
 </html>

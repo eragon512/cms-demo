@@ -1,5 +1,6 @@
 <?php
-	require("../model/layout_functions.php");
+	require_once("../model/panel_functions.php");
+	require_once("../model/layout_functions.php");
 	if(!isset($_GET["layout_id"])) {
 		die("No layout id found");
 	}
@@ -7,9 +8,10 @@
 	if(!($layout = load_layout($layout_id))) {
 		die("Invalid layout Id");
 	}
-	require("../model/panel_functions.php");
+	if($_SERVER["REQUEST_METHOD"] === "POST") {
+		split_panel($layout_id,$_POST["panel_id"],$_POST["cut_direction"],$_POST["height_width"]);
+	}
 ?>
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -44,7 +46,7 @@
 		</style>
 	</head>
 	<body>
-		<?php load_panel($layout_id,0,"edit"); ?>
+		<?php load_panel($layout_id,"layout-edit",NULL); ?>
 	</body>
 	<script>
 
@@ -70,7 +72,7 @@
 			console.log(panel_id);
 			var panel = document.getElementById(panel_id);
 			
-			var sub_panels_form = newElement('form',{"action": "process_input.php", "method": "POST"});
+			var sub_panels_form = newElement('form',{"action": "", "method": "POST"});
 
 			var layout_id = newElement('input',{"type": "hidden","name": "layout_id", "value": <?php echo $layout_id; ?> });
 			var panel_id = newElement('input',{"type": "hidden","name": "panel_id", "value": panel_id});

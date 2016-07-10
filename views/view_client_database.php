@@ -1,5 +1,5 @@
 <?php
-	require('../model/load_client_database.php');
+	require_once('../model/client_database_functions.php');
 	
 	$server = $_GET["db_server"];
 	$username = $_GET["db_user"];
@@ -18,7 +18,7 @@
 	<head>
 	</head>
 	<body>
-		List of Tables in Database <?php echo $_GET["db_name"]; ?>
+		List of Tables in Database - <?php echo $db_name; ?>
 		<ul>
 			<?php
 				foreach($client_database as $client_database_table) {

@@ -15,17 +15,35 @@
 	<head>
 		<style>
 			html,body {
-				height: 95%;
-				width: 95%;
-
+				height: 100%;
+				width : 100%;
+				position: absolute;
+				display: table;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				display: flex;
 			}
 			.panel {
 				border: 1px solid red;
-				display: inline-flex;
+				margin: -1px;
+				padding: -1px;
+			}
+			.wrapper {
+				height: 100%;
+				width: 100%;
+				display: flex;
+			}
+			.horizontal-wrapper {
+				flex-direction: row;
+			}
+			.vertical-wrapper {
+				flex-direction: column;
 			}
 		</style>
 	</head>
 	<body>
-		<?php load_panel($layout_id,0,"view"); ?>
+		<?php load_panel($layout_id,"layout-view",NULL); ?>
 	</body>
 </html>
