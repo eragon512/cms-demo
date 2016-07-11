@@ -2,14 +2,15 @@
 	function find_page_id($page_name) {
 		require_once("load_database.php");
 		$connect = load_database();
-		$find_page_result = mysqli_query($connect,"SELECT page_id FROM page_list WHERE page_name={$page_name}");
+		$find_page_result = mysqli_query($connect,"SELECT page_id FROM page_list WHERE page_name='{$page_name}' ;");
 		if(!$find_page_result) {
 			echo mysqli_error($connect);
 			mysqli_close($connect);
-			die("Invalid Page Name");
+			die(",\nInvalid Page Name");
 		}
+		$page_id = mysqli_fetch_array($find_page_result,MYSQLI_ASSOC)["page_id"];
 		mysqli_close($connect);
-		return $find_page_result["page_id"];
+		return $page_id;
 	}
 	
 	function create_page($page) {
@@ -23,6 +24,15 @@
 			die();
 		}
 		$stmt->close();
+
+		$page_id = find_page_id($page["page_name"]);
+		$page_data_result = mysqli_query($connect,"SELECT * FROM panel_list WHERE layout_id={$page["layout_id"]} ;");
+		$page_data = [];
+		while($panel = mysqli_fetch_array($page_data_result,MYSQLI_ASSOC)) {
+			$page_data[(int)$panel["panel_child_id"]] = NULL;
+		}
+		store_page_data($page_id,$page["layout_id"],$page_data);
+
 		mysqli_close($connect);
 	}
 

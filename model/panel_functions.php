@@ -44,14 +44,14 @@
 
 	$panel_tracker = [];
 
-	function load_panel_util($layout_id,$panel_id,$mode,$page_id) {
+	function load_panel_util($layout_id,$panel_id,$mode,$page_id,& $visited) {
 		if(isset($layout_id) && isset($panel_id)) {
 			$panel_query = "";
 			if($mode === "layout-edit" || $mode === "layout-view") {
 				$panel_query = "SELECT * FROM panel_list WHERE layout_id={$layout_id} AND panel_id={$panel_id} ;";
 			} else if ($mode === "page-edit" || $mode === "page-view") {
 				if(isset($page_id)) {
-					$panel_query = "SELECT * FROM panel_list NATURAL LEFT JOIN page_panel_list WHERE layout_id={$layout_id} AND panel_id={$panel_id} AND (page_id={$page_id} OR page_id IS NULL);";
+					$panel_query = "SELECT * FROM panel_list NATURAL LEFT JOIN page_panel_list WHERE layout_id={$layout_id} AND panel_id={$panel_id} AND page_id={$page_id};";
 				} else {
 					die("Invalid Page ID");
 				}
@@ -76,6 +76,8 @@
 				while($panel = mysqli_fetch_array($load_panel_result,MYSQLI_ASSOC)) {
 					array_push($panel_list,$panel);
 				}
+				unset($panel);
+				mysqli_close($connect);
 
 				if($panel_list[0]["panel_class"] === "top" || $panel_list[0]["panel_class"] === "bottom") {
 					echo "<div class='wrapper vertical-wrapper'>";
@@ -88,18 +90,20 @@
 				foreach($panel_list as $panel) {
 					echo "<div name='panel{$panel["panel_id"]}' id=".(int)$panel["panel_child_id"]." class='panel {$panel["panel_class"]}' style='height:{$panel["panel_height"]}%; width:{$panel["panel_width"]}%;' >\n";
 						array_push($GLOBALS['panel_tracker'],(int)$panel["panel_child_id"]);
-						if(!load_panel_util($layout_id,(int)$panel["panel_child_id"],$mode,$page_id)) {
+						$visited[(int)$panel["panel_child_id"]] = true;
+						
+						if(!load_panel_util($layout_id,(int)$panel["panel_child_id"],$mode,$page_id,$visited)) {
 							echo "<div class='panel-content'>";
 							
 							if($mode === "layout-edit") {
 								echo "<button type='button' onclick='split_panel(this.parentNode.parentNode.id);'>click to split</button>";
-							}
+								}
 							else if($mode === "layout-view") {
 								echo "";
 							}
 							else if($mode === "page-edit") {
 								if(isset($panel["page_id"]) && $panel["page_id"] === $page_id) {
-									echo "<textarea name={$panel["panel_child_id"]}>{$panel["panel_data"]}</textarea><br>";
+									echo "<textarea name={$panel["panel_child_id"]}>{$panel["panel_data"]}{$panel["page_id"]}</textarea><br>";
 								} else {
 									echo "<textarea name={$panel["panel_child_id"]}></textarea><br>";
 								}
@@ -116,20 +120,21 @@
 				}
 				echo "</div>\n";
 			}
-			mysqli_close($connect);
 			return true;
 		}
 		return false;
 	}
 
 	function load_panel($layout_id,$mode,$page_id) {
+		$visited = [];
 		if($mode === "page-edit") {
 			echo "<form method='POST' action='' class='wrapper vertical-wrapper'>";
-			load_panel_util($layout_id,0,$mode,$page_id);
+			load_panel_util($layout_id,0,$mode,$page_id,$visited);
 			echo "<div class='horizontal-wrapper'><button type='submit'>Change Text</button><a href='view_page.php?page_id={$page_id}'><button type='button'>View Page</button></a></div></form>";
 		} else {
-			load_panel_util($layout_id,0,$mode,$page_id);
+			load_panel_util($layout_id,0,$mode,$page_id,$visited);
 		}
+		var_dump($visited);
 	}
 
 	function load_panel_list($layout_id) {

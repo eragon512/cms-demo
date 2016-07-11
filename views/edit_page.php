@@ -58,6 +58,9 @@
 		</style>
 	</head>
 	<body>
-		<?php load_panel($page["layout_id"],"page-edit",$page["page_id"]); ?>
+		<?php
+			load_panel($page["layout_id"],"page-edit",$page["page_id"]);
+			var_dump($panel_tracker);
+		?>
 	</body>
 </html>
