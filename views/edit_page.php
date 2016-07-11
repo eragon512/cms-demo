@@ -58,6 +58,6 @@
 		</style>
 	</head>
 	<body>
-		<?php load_panel($page["layout_id"],"page-edit",$page["page_id"]);?>
+		<?php load_panel($page["layout_id"],"page-edit",$page["page_id"]); ?>
 	</body>
 </html>

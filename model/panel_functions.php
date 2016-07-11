@@ -42,7 +42,7 @@
 		create_panel($layout_id,$panel2);
 	}
 
-	//$panel_tracker = [];
+	$panel_tracker = [];
 
 	function load_panel_util($layout_id,$panel_id,$mode,$page_id) {
 		if(isset($layout_id) && isset($panel_id)) {
@@ -51,7 +51,7 @@
 				$panel_query = "SELECT * FROM panel_list WHERE layout_id={$layout_id} AND panel_id={$panel_id} ;";
 			} else if ($mode === "page-edit" || $mode === "page-view") {
 				if(isset($page_id)) {
-					$panel_query = "SELECT * FROM panel_list NATURAL LEFT JOIN page_panel_list WHERE layout_id={$layout_id} AND panel_id={$panel_id} ;";
+					$panel_query = "SELECT * FROM panel_list NATURAL LEFT JOIN page_panel_list WHERE layout_id={$layout_id} AND panel_id={$panel_id} AND (page_id={$page_id} OR page_id IS NULL);";
 				} else {
 					die("Invalid Page ID");
 				}
@@ -87,7 +87,7 @@
 
 				foreach($panel_list as $panel) {
 					echo "<div name='panel{$panel["panel_id"]}' id=".(int)$panel["panel_child_id"]." class='panel {$panel["panel_class"]}' style='height:{$panel["panel_height"]}%; width:{$panel["panel_width"]}%;' >\n";
-						//array_push($GLOBALS['panel_tracker'],(int)$panel["panel_child_id"]);
+						array_push($GLOBALS['panel_tracker'],(int)$panel["panel_child_id"]);
 						if(!load_panel_util($layout_id,(int)$panel["panel_child_id"],$mode,$page_id)) {
 							echo "<div class='panel-content'>";
 							
@@ -98,7 +98,7 @@
 								echo "";
 							}
 							else if($mode === "page-edit") {
-								if($panel["page_id"] == $page_id) {
+								if(isset($panel["page_id"]) && $panel["page_id"] === $page_id) {
 									echo "<textarea name={$panel["panel_child_id"]}>{$panel["panel_data"]}</textarea><br>";
 								} else {
 									echo "<textarea name={$panel["panel_child_id"]}></textarea><br>";
@@ -112,9 +112,9 @@
 							}
 							echo "</div>";
 						}
-					echo "</div>";
+					echo "</div>\n";
 				}
-				echo "</div>";
+				echo "</div>\n";
 			}
 			mysqli_close($connect);
 			return true;
@@ -124,9 +124,9 @@
 
 	function load_panel($layout_id,$mode,$page_id) {
 		if($mode === "page-edit") {
-			echo "<form method='POST' action=''>";
+			echo "<form method='POST' action='' class='wrapper vertical-wrapper'>";
 			load_panel_util($layout_id,0,$mode,$page_id);
-			echo "<button type='submit'>Change Text</button></form>";
+			echo "<div class='horizontal-wrapper'><button type='submit'>Change Text</button><a href='view_page.php?page_id={$page_id}'><button type='button'>View Page</button></a></div></form>";
 		} else {
 			load_panel_util($layout_id,0,$mode,$page_id);
 		}
