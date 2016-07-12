@@ -116,7 +116,7 @@
 		$new_page_id = find_page_id($new_page["page_name"]);
 		$old_page_data = load_page_data($copy["page_id"]);
 
-		var_dump($old_page_data);
+		//var_dump($old_page_data);
 		store_page_data($new_page_id,(int)$old_page_data["layout_id"],$old_page_data);
 	}
 

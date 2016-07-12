@@ -103,7 +103,7 @@
 							}
 							else if($mode === "page-edit") {
 								if(isset($panel["page_id"]) && $panel["page_id"] === $page_id) {
-									echo "<textarea name='textarea[{$panel["panel_child_id"]}]'>{$panel["panel_data"]}</textarea><br><button type='button' id={$panel["panel_child_id"]} onclick='javascript: show_block_list(this.id);'>Add block </button>";
+									echo "<textarea name='textarea[{$panel["panel_child_id"]}]' id='textarea{$panel["panel_child_id"]}'>{$panel["panel_data"]}</textarea><br><button type='button' id='add_block_{$panel["panel_child_id"]}' onclick='javascript: show_block_list(this.id);'>Add block</button>";
 								} else {
 									echo "<textarea name='textarea[{$panel["panel_child_id"]}]'></textarea><br>";
 								}
@@ -134,7 +134,7 @@
 		} else {
 			load_panel_util($layout_id,0,$mode,$page_id,$visited);
 		}
-		var_dump($visited);
+		//var_dump($visited);
 	}
 
 	function load_panel_list($layout_id) {

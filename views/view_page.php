@@ -26,7 +26,6 @@
 				display: flex;
 			}
 			.panel {
-				border: 1px solid red;
 			}
 			.wrapper {
 				height: 100%;
