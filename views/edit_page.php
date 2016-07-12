@@ -2,6 +2,7 @@
 	require_once("../model/page_functions.php");
 	require_once("../model/layout_functions.php");
 	require_once("../model/panel_functions.php");
+	//require_once("../model/block_functions.php");
 	if(!isset($_GET["page_id"])) {
 		die("No page id found");
 	}
@@ -12,6 +13,8 @@
 	if($_SERVER["REQUEST_METHOD"] === "POST") {
 		store_page_data($page["page_id"],$page["layout_id"],$_POST);
 	}
+	//$block_list = load_block_list();
+	$block_list = array(0 => '1');
 ?>
 
 <!DOCTYPE html>
@@ -63,4 +66,38 @@
 			var_dump($panel_tracker);
 		?>
 	</body>
+	<script>
+		function setAttributes(el, options) {
+			Object.keys(options).forEach(function(attr) {
+				el.setAttribute(attr, options[attr]);
+			});
+		};
+
+		function newElement(element,options) {
+			var newElement = document.createElement(element);
+			setAttributes(newElement,options);
+			return newElement;
+		};
+
+		var block_button_visited = [];		
+		function show_block_list(panel_id) {
+			if(block_button_visited.indexOf(panel_id) != -1) {
+				return;
+			} else {
+				block_button_visited.push(panel_id);
+			}
+			var block_button = document.getElementById(panel_id);
+			var select_block = newElement('select',{"name" : "block["+panel_id+"]"});
+			var select_block_options =  <?php echo json_encode($block_list); ?> ;
+			select_block_options.forEach( function(block_item) {
+				block_option = newElement('option',{"value": block_item});
+				block_option.innerHTML += block_item;
+				select_block.appendChild(block_option);
+			});
+			block_button.parentNode.appendChild(select_block);
+		}
+		function add_block_data(panel_id) {
+			panel_textarea = document.getElementsByTag('textarea').getElementsByName(panel_id);
+		}
+	</script>
 </html>

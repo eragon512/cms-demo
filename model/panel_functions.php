@@ -88,7 +88,7 @@
 				}
 
 				foreach($panel_list as $panel) {
-					echo "<div id=".(int)$panel["panel_child_id"]." class='panel {$panel["panel_class"]}' style='height:{$panel["panel_height"]}%; width:{$panel["panel_width"]}%;' >\n";
+					echo "<div id='{$panel_id}-".(int)$panel["panel_child_id"]."' class='panel {$panel["panel_class"]}' style='height:{$panel["panel_height"]}%; width:{$panel["panel_width"]}%;' >\n";
 						array_push($GLOBALS['panel_tracker'],(int)$panel["panel_child_id"]);
 						$visited[(int)$panel["panel_child_id"]] = true;
 						
@@ -103,9 +103,9 @@
 							}
 							else if($mode === "page-edit") {
 								if(isset($panel["page_id"]) && $panel["page_id"] === $page_id) {
-									echo "<textarea name={$panel["panel_child_id"]}>{$panel["panel_data"]}{$panel["page_id"]}</textarea><br><button name=></button>";
+									echo "<textarea name='textarea[{$panel["panel_child_id"]}]'>{$panel["panel_data"]}</textarea><br><button type='button' id={$panel["panel_child_id"]} onclick='javascript: show_block_list(this.id);'>Add block </button>";
 								} else {
-									echo "<textarea name={$panel["panel_child_id"]}></textarea><br>";
+									echo "<textarea name='textarea[{$panel["panel_child_id"]}]'></textarea><br>";
 								}
 							}
 							else if($mode === "page-view") {
