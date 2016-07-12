@@ -57,3 +57,24 @@
 		mysqli_close($connect);
 		return $block_list;
 	}
+
+	function load_block_data($panel_data) {
+		$mod_data = $panel_data;
+		$regex = "|<block>(.*)</[block]+>|U";
+		preg_match_all($regex, $mod_data, $matches);
+		//var_dump($matches);
+
+		if($matches[1]) {
+			$block_list = load_block_list();
+			$mod_block_list = [];
+			foreach($block_list as $block) {
+				$mod_block_list[$block["block_name"]] = $block["block_data"];
+			}
+
+			foreach($matches[1] as $block_name) {
+				$mod_data = preg_replace("|<block>".$block_name."</[block]+>|U",$mod_block_list[$block_name],$mod_data);
+			}
+		}
+
+		return $mod_data;
+	}

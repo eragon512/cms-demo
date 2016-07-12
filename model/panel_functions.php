@@ -91,9 +91,8 @@
 				foreach($panel_list as $panel) {
 					echo "<div id=".(int)$panel["panel_child_id"]." class='panel {$panel["panel_class"]}' style='height:{$panel["panel_height"]}%; width:{$panel["panel_width"]}%;' >\n";
 						array_push($GLOBALS['panel_tracker'],(int)$panel["panel_child_id"]);
-						$visited[(int)$panel["panel_child_id"]] = true;
 						
-						if(!load_panel_util($layout_id,(int)$panel["panel_child_id"],$mode,$page_id,$visited)) {
+						if(!load_panel_util($layout_id,(int)$panel["panel_child_id"],$mode,$page_id)) {
 							echo "<div class='panel-content'>";
 							
 							if($mode === "layout-edit") {
@@ -110,7 +109,7 @@
 								}
 							}
 							else if($mode === "page-view") {
-								echo $panel["panel_data"];
+								echo process_references($panel["panel_data"]);
 							}
 							else {
 								echo "Invalid Mode";
@@ -130,10 +129,10 @@
 		$visited = [];
 		if($mode === "page-edit") {
 			echo "<form method='POST' action='' class='wrapper vertical-wrapper'>";
-			load_panel_util($layout_id,0,$mode,$page_id,$visited);
+			load_panel_util($layout_id,0,$mode,$page_id);
 			echo "<div class='horizontal-wrapper'><button type='submit'>Change Text</button><a href='view_page.php?page_id={$page_id}'><button type='button'>View Page</button></a></div></form>";
 		} else {
-			load_panel_util($layout_id,0,$mode,$page_id,$visited);
+			load_panel_util($layout_id,0,$mode,$page_id);
 		}
 		//var_dump($visited);
 	}
@@ -158,4 +157,10 @@
 		
 		//var_dump($layout);
 		return $panel_list;
+	}
+
+	function process_references($panel_data) {
+		require_once("block_functions.php");
+		$mod_data = load_block_data($panel_data);
+		return $mod_data;
 	}

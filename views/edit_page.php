@@ -106,11 +106,11 @@
 		function add_block_data(panel_id) {
 			panel_textarea = document.getElementById('textarea'+panel_id);
 			block_id = document.getElementsByName("block["+panel_id+"]")[0].value;
-			console.log(block_id);
+			//console.log(block_id);
 			
 			var block = block_list.filter(function(item) { return item.block_id === block_id; })[0];
-			panel_textarea.innerHTML += "\n"+block.block_data;
-			console.log(panel_textarea.id+block.block_data);
+			panel_textarea.innerHTML += "\n<block>"+block.block_name+"</block>";
+			//console.log(panel_textarea.id+block.block_data);
 		}
 	</script>
 </html>
