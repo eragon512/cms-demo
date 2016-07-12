@@ -7,6 +7,7 @@
 		$stmt->bind_param("iiiiis",$layout_no,$panel["panel_id"],$panel["panel_child_id"],$panel["panel_height"],$panel["panel_width"],$panel["panel_class"]);
 		if(!$stmt->execute()) {
 			echo mysqli_error($connect);
+			echo $panel["panel_child_id"];
 			mysqli_close($connect);
 			die();
 		}
@@ -17,8 +18,8 @@
 	function split_panel($layout_id,$panel_id,$cut_direction,$height_width) {
 
 		$panel1["panel_id"] = $panel2["panel_id"] = (int)$panel_id;
-		$panel1["panel_child_id"] = $panel1["panel_id"]*2;
-		$panel2["panel_child_id"] = $panel2["panel_id"]*2 + 1;
+		$panel1["panel_child_id"] = $panel1["panel_id"]*2 + 1;
+		$panel2["panel_child_id"] = $panel2["panel_id"]*2 + 2;
 
 		if($cut_direction === "horizontal") {
 			$panel1["panel_width"] = $panel2["panel_width"] = 100;
@@ -44,7 +45,7 @@
 
 	$panel_tracker = [];
 
-	function load_panel_util($layout_id,$panel_id,$mode,$page_id,& $visited) {
+	function load_panel_util($layout_id,$panel_id,$mode,$page_id) {
 		if(isset($layout_id) && isset($panel_id)) {
 			$panel_query = "";
 			if($mode === "layout-edit" || $mode === "layout-view") {
@@ -88,7 +89,7 @@
 				}
 
 				foreach($panel_list as $panel) {
-					echo "<div id='{$panel_id}-".(int)$panel["panel_child_id"]."' class='panel {$panel["panel_class"]}' style='height:{$panel["panel_height"]}%; width:{$panel["panel_width"]}%;' >\n";
+					echo "<div id=".(int)$panel["panel_child_id"]." class='panel {$panel["panel_class"]}' style='height:{$panel["panel_height"]}%; width:{$panel["panel_width"]}%;' >\n";
 						array_push($GLOBALS['panel_tracker'],(int)$panel["panel_child_id"]);
 						$visited[(int)$panel["panel_child_id"]] = true;
 						
@@ -109,7 +110,7 @@
 								}
 							}
 							else if($mode === "page-view") {
-								echo "{$panel["panel_data"]}";
+								echo $panel["panel_data"];
 							}
 							else {
 								echo "Invalid Mode";

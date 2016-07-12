@@ -55,7 +55,7 @@
 				max-width: 100%;
 				max-height: 100%;
 				min-width: 80%;
-				min-height: 80%;
+				min-height: 50%;
 			}
 		</style>
 	</head>
@@ -102,7 +102,7 @@
 			block_button.parentNode.appendChild(select_block);
 			block_button.parentNode.appendChild(block_data_button);
 		}
-		
+
 		function add_block_data(panel_id) {
 			panel_textarea = document.getElementById('textarea'+panel_id);
 			block_id = document.getElementsByName("block["+panel_id+"]")[0].value;
@@ -110,7 +110,7 @@
 			
 			var block = block_list.filter(function(item) { return item.block_id === block_id; })[0];
 			panel_textarea.innerHTML += "\n"+block.block_data;
-			console.log(panel_textarea.id);
+			console.log(panel_textarea.id+block.block_data);
 		}
 	</script>
 </html>

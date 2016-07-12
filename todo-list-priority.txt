@@ -1,9 +1,0 @@
-Left:
-1. Add menu
-4. DB - PHP view students
-5. URL re-direction
-
-Done:
-1. Add html/block
-2. Panel issue - only one layout per page
-3. Copy page

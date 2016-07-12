@@ -26,6 +26,7 @@
 				display: flex;
 			}
 			.panel {
+				box-sizing: border-box;
 			}
 			.wrapper {
 				height: 100%;
