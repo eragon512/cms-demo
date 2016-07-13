@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<form name="show_html" action="render_html.php" method="POST">
+			Enter HTML code to run: <br>
+			<textarea name="render_markup" rows=10 cols=40></textarea>
+			<button type="submit" value="Submit">Show Result</button>
+		</form>
+		<form name="youtube_window" action="show_youtube_window.php" method="POST">
+			Youtube Link: https://youtube.com/watch?<input type="text" name="youtube_link" />
+			<button type="submit" value="Submit">Show Result</button>
+		</form>
+		<form name="youtube_window" action="show_youtube_window.php" method="POST">
+			Youtube Link: https://youtu.be/<input type="text" name="youtube_link_short" />
+			<button type="submit" value="Submit">Show Result</button>
+		</form>
+	</body>
+</html>
