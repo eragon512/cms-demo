@@ -42,7 +42,7 @@
 	}
 
 	function load_block_list() {
-		$block_list = [];
+		$block_list = array();
 		require_once("load_database.php");
 		$connect = load_database();
 		$load_block_list_result = mysqli_query($connect,"SELECT * FROM block_list ;");
@@ -66,7 +66,7 @@
 
 		if($matches[1]) {
 			$block_list = load_block_list();
-			$mod_block_list = [];
+			$mod_block_list = array();
 			foreach($block_list as $block) {
 				$mod_block_list[$block["block_name"]] = $block["block_data"];
 			}

@@ -27,7 +27,7 @@
 		require_once("load_database.php");
 		$connect = load_database();
 		$client_database_result = mysqli_query($connect,"SELECT * FROM client_database_list ;");
-		$client_database_list = [];
+		$client_database_list = array();
 		
 		while($client_database = mysqli_fetch_array($client_database_result,MYSQLI_ASSOC)) {
 			array_push($client_database_list, $client_database);
@@ -41,7 +41,7 @@
 		if(!($connect = mysqli_connect($server,$username,$password,$name))) {
 			die(Exception("Unable to connect to database"));
 		}
-		$client_database = [];
+		$client_database = array();
 		$result = mysqli_query($connect,"show tables");
 		while($client_table = mysqli_fetch_array($result,MYSQLI_ASSOC)) {
 			array_push($client_database,$client_table["Tables_in_".$name]);
@@ -56,7 +56,7 @@
 			die(Exception("Unable to connect to database"));
 		}
 		$table_schema_result = mysqli_query($connect,"DESCRIBE {$table_name} ;");
-		$table["schema"] = [];
+		$table["schema"] = array();
 		while($table_field = mysqli_fetch_array($table_schema_result,MYSQLI_ASSOC)["Field"]) {
 			array_push($table["schema"],$table_field);
 		}
@@ -64,7 +64,7 @@
 		if($sql_query) $table_data_query = $sql_query;
 
 		if($table_data_result = mysqli_query($connect,$table_data_query)) {
-			$table["data"] = [];
+			$table["data"] = array();
 			while($table_row = mysqli_fetch_array($table_data_result,MYSQLI_ASSOC)) {
 				array_push($table["data"],$table_row);
 			}

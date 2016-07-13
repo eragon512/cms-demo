@@ -42,7 +42,7 @@
 	function load_layout_list() {
 		require_once("load_database.php");
 		$connect = load_database();
-		$layout_list = [];
+		$layout_list = array();
 		$load_layout_list_result = mysqli_query($connect,"SELECT * FROM layout_list");
 		while($layout = mysqli_fetch_array($load_layout_list_result,MYSQLI_ASSOC)) {
 			array_push($layout_list,$layout);
@@ -57,7 +57,7 @@
 		$layout_result = mysqli_query($connect,"SELECT * FROM layout_list WHERE layout_id={$layout_id};");
 		$layout = mysqli_fetch_array($layout_result,MYSQLI_ASSOC);
 		
-		$layout["panel"] = [];
+		$layout["panel"] = array();
 		$layout_panel_list_result = mysqli_query($connect,"SELECT * FROM panel_list WHERE layout_id={$layout_id} ;");
 		if(!$layout_panel_list_result) {
 			echo mysqli_error($connect);

@@ -43,7 +43,7 @@
 		create_panel($layout_id,$panel2);
 	}
 
-	$panel_tracker = [];
+	$panel_tracker = array();
 
 	function load_panel_util($layout_id,$panel_id,$mode,$page_id) {
 		if(isset($layout_id) && isset($panel_id)) {
@@ -73,7 +73,7 @@
 				return false;
 			} else {
 				//echo mysqli_num_rows($load_panel_result)."\n";
-				$panel_list = [];
+				$panel_list = array();
 				while($panel = mysqli_fetch_array($load_panel_result,MYSQLI_ASSOC)) {
 					array_push($panel_list,$panel);
 				}
@@ -126,7 +126,7 @@
 	}
 
 	function load_panel($layout_id,$mode,$page_id) {
-		$visited = [];
+		$visited = array();
 		if($mode === "page-edit") {
 			echo "<form method='POST' action='' class='wrapper vertical-wrapper'>";
 			load_panel_util($layout_id,0,$mode,$page_id);
@@ -141,14 +141,14 @@
 		require_once("load_database.php");
 		$connect = load_database();
 		
-		$panel_list = [];
+		$panel_list = array();
 		$panel_list_result = mysqli_query($connect,"SELECT * FROM panel_list WHERE layout_id={$layout_id} ;");
 		if(!$panel_list_result) {
 			echo mysqli_error($connect);
 			mysqli_close($connect);
 			die("...");
 		} else {
-			$panel_list = [];
+			$panel_list = array();
 			while($panel = mysqli_fetch_array($panel_list_result,MYSQLI_ASSOC)) {
 				$panel_list[(int)$panel["panel_child_id"]] = $panel;
 			}
