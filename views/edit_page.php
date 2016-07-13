@@ -3,6 +3,7 @@
 	require_once("../model/layout_functions.php");
 	require_once("../model/panel_functions.php");
 	require_once("../model/block_functions.php");
+	require_once("../model/client_database_functions.php");
 	if(!isset($_GET["page_id"])) {
 		die("No page id found");
 	}
@@ -14,6 +15,7 @@
 		store_page_data($page["page_id"],$page["layout_id"],$_POST);
 	}
 	$block_list = load_block_list();
+	$client_database_query_list = load_client_database_query_list();
 ?>
 
 <!DOCTYPE html>
@@ -65,6 +67,7 @@
 			//var_dump($panel_tracker);
 		?>
 	</body>
+	
 	<script>
 		function setAttributes(el, options) {
 			Object.keys(options).forEach(function(attr) {
@@ -114,6 +117,47 @@
 					panel_textarea.value = "<block>"+block.block_name+"</block>";
 				} else {
 					panel_textarea.value += "<block>"+block.block_name+"</block>";
+				}
+				console.log(panel_textarea.id);
+			}
+		}
+
+		var query_button_visited = [];
+		var query_list = <?php echo json_encode($client_database_query_list); ?> ;
+
+		function show_query_list(panel_id) {
+			if(query_button_visited.indexOf(panel_id) != -1) {
+				return;
+			} else {
+				query_button_visited.push(panel_id);
+			}
+			var query_button = document.getElementById(panel_id);
+			panel_id = panel_id.replace("add_query_","");
+			var select_query = newElement('select',{"name" : "query["+panel_id+"]"});
+			var select_query_options = query_list;
+			select_query_options.forEach( function(query_item) {
+				query_option = newElement('option',{"value": query_item["client_db_query_id"]});
+				query_option.innerHTML += query_item["client_db_query_name"];
+				select_query.appendChild(query_option);
+			});
+
+			var query_data_button = newElement('button', {"type" : "button", "id": query_button.id.replace("add_query_",""),"onclick": "javascript: add_query_data(this.id)"});
+			query_data_button.innerHTML = "Add Query Data";
+			query_button.parentNode.appendChild(select_query);
+			query_button.parentNode.appendChild(query_data_button);
+		}
+
+		function add_query_data(panel_id) {
+			panel_textarea = document.getElementById('textarea'+panel_id);
+			query_id = document.getElementsByName("query["+panel_id+"]")[0].value;
+			//console.log(block_id);
+			
+			var query = query_list.filter(function(item) { return item.client_db_query_id === query_id; })[0];
+			if(panel_textarea) {
+				if(!panel_textarea.innerHTML || panel_textarea.innerHTML === "") {
+					panel_textarea.value = "<db_query>"+query.client_db_query_name+"</db_query>";
+				} else {
+					panel_textarea.value += "<db_query>"+query.client_db_query_name+"</db_query>";
 				}
 				console.log(panel_textarea.id);
 			}
