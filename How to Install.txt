@@ -1,3 +1,8 @@
+Requirements
+1. MySQL - 5.7.19 (max)
+2. PHP - 5.2+ (5.4+)
+3. Apache - 2.4.17
+
 1. Install a web server, like WAMPserver for Windows, or LAMP for Linux
 2. Unzip the cms-demo.zip or cms-demo.tar file into a location for hosting your site
 3. Create a new database for the software called, say xyz

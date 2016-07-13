@@ -103,13 +103,13 @@
 							}
 							else if($mode === "page-edit") {
 								if(isset($panel["page_id"]) && $panel["page_id"] === $page_id) {
-									echo "<textarea name='textarea[{$panel["panel_child_id"]}]' id='textarea{$panel["panel_child_id"]}'>{$panel["panel_data"]}</textarea><br><button type='button' id='add_block_{$panel["panel_child_id"]}' onclick='javascript: show_block_list(this.id);'>Add block</button>";
+									echo "<textarea name='textarea[{$panel["panel_child_id"]}]' id='textarea{$panel["panel_child_id"]}'>{$panel["panel_data"]}</textarea><br><button type='button' id='add_block_{$panel["panel_child_id"]}' onclick='javascript: show_block_list(this.id);'>Add block</button><br><button type='button' id='add_query_{$panel["panel_child_id"]}' onclick='javascript: show_query_list(this.id);'>Add db query</button>";
 								} else {
 									echo "<textarea name='textarea[{$panel["panel_child_id"]}]'></textarea><br>";
 								}
 							}
 							else if($mode === "page-view") {
-								echo process_references($panel["panel_data"]);
+								echo load_references($panel["panel_data"]);
 							}
 							else {
 								echo "Invalid Mode";
@@ -159,8 +159,12 @@
 		return $panel_list;
 	}
 
-	function process_references($panel_data) {
+	function load_references($panel_data) {
+		$mod_data = $panel_data;
 		require_once("block_functions.php");
-		$mod_data = load_block_data($panel_data);
+		require_once("client_database_functions.php");
+		$mod_data = load_block_data($mod_data);
+		$mod_data = load_client_database_query_data($mod_data);
+		
 		return $mod_data;
 	}

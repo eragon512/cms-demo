@@ -60,7 +60,7 @@
 			$page_data["page_id"] = $page_id;
 			$page_data["layout_id"] = 0;
 
-			$page_data["textarea"] = [];
+			$page_data["textarea"] = array();
 			while($page = mysqli_fetch_array($load_page_data_result)) {
 				$page_data["textarea"][(int)$page["panel_child_id"]] = $page["panel_data"];
 				$page_data["layout_id"] = $page["layout_id"];
@@ -85,7 +85,7 @@
 
 		$page_id = find_page_id($page["page_name"]);
 		$page_data_result = mysqli_query($connect,"SELECT * FROM panel_list WHERE layout_id={$page["layout_id"]} ;");
-		$page_data["textarea"] = [];
+		$page_data["textarea"] = array();
 		while($panel = mysqli_fetch_array($page_data_result,MYSQLI_ASSOC)) {
 			$page_data["textarea"][(int)$panel["panel_child_id"]] = NULL;
 		}
@@ -136,7 +136,7 @@
 	function load_page_list() {
 		require_once("load_database.php");
 		$connect = load_database();
-		$page_list = [];
+		$page_list = array();
 		$load_page_list_result = mysqli_query($connect,"SELECT * FROM page_list ;");
 		if(!$load_page_list_result) {
 			echo mysqli_error($connect);
