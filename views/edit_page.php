@@ -109,8 +109,14 @@
 			//console.log(block_id);
 			
 			var block = block_list.filter(function(item) { return item.block_id === block_id; })[0];
-			panel_textarea.innerHTML += "\n<block>"+block.block_name+"</block>";
-			console.log(panel_textarea.id);
+			if(panel_textarea) {
+				if(!panel_textarea.innerHTML || panel_textarea.innerHTML === "") {
+					panel_textarea.value = "<block>"+block.block_name+"</block>";
+				} else {
+					panel_textarea.value += "<block>"+block.block_name+"</block>";
+				}
+				console.log(panel_textarea.id);
+			}
 		}
 	</script>
 </html>
