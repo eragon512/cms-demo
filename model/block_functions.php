@@ -32,7 +32,7 @@
 	function delete_block($block) {
 		require_once("load_database.php");
 		$connect = load_database();
-		$delete_block_result = mysqli_query($connect,"DELETE FROM block_list WHERE block_id={$block["block_id"]}");
+		$delete_block_result = mysqli_query($connect,"DELETE FROM block_list WHERE block_id={$block["block_id"]} ;");
 		if(!$delete_block_result) {
 			echo mysqli_error($connect);
 			mysqli_close($connect);

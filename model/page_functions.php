@@ -120,6 +120,19 @@
 		store_page_data($new_page_id,(int)$old_page_data["layout_id"],$old_page_data);
 	}
 
+	function delete_page($page) {
+		require_once("load_database.php");
+		$connect = load_database();
+		$delete_page_result_1 = mysqli_query($connect,"DELETE FROM page_list WHERE page_id={$page["page_id"]} ; ");
+		$delete_page_result_2 = mysqli_query($connect,"DELETE FROM page_panel_list WHERE page_id={$page["page_id"]} ;");
+		if(!$delete_page_result_1 || !$delete_page_result_2) {
+			echo mysqli_error($connect);
+			mysqli_close($connect);
+			die();
+		}
+		mysqli_close($connect);
+	}
+
 	function load_page_list() {
 		require_once("load_database.php");
 		$connect = load_database();
